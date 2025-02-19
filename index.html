@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Heroes - Character Selection</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <audio id="bgMusic" loop>
+        <source src="audio/background.mp3" type="audio/mp3">
+    </audio>
+    <div class="game-container">
+        <h1>Select Your Industry Hero</h1>
+        
+        <div class="character-grid">
+            <!-- Characters will be dynamically inserted here -->
+        </div>
+
+        <div class="controls-hint">
+            <p>Use arrow keys to navigate</p>
+            <p>Press ENTER to select</p>
+            <p>Press M to toggle music</p>
+        </div>
+
+        <div id="videoModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <div class="video-container">
+                    <video id="characterVideo" controls>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
