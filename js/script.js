@@ -51,7 +51,7 @@ const characterData = [
     {
         "id": 8,
         "name": "Teller",
-        "industry": "Banking",
+        "industry": "Financial Services",
         "image": "images/characters/char8.png",
         "video": "videos/placeholder.mp4"
     }
