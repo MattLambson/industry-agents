@@ -25,7 +25,7 @@ const characterData = [
         "name": "Scholar",
         "industry": "Edu/Universities",
         "image": "images/characters/char4.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/video4.mp4"
     },
     {
         "id": 5,
