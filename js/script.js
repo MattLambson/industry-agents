@@ -4,7 +4,7 @@ const characterData = [
         "name": "HAVoC",
         "industry": "Trades/Service",
         "image": "images/characters/char1.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/video1.mp4"
     },
     {
         "id": 2,
@@ -46,7 +46,7 @@ const characterData = [
         "name": "The Home Ranger",
         "industry": "Real Estate",
         "image": "images/characters/char7.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/video7.mp4"
     }
 ];
 
