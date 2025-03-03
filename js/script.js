@@ -47,6 +47,13 @@ const characterData = [
         "industry": "Real Estate",
         "image": "images/characters/char7.png",
         "video": "videos/video7.mp4"
+    },
+    {
+        "id": 8,
+        "name": "Teller",
+        "industry": "Banking",
+        "image": "images/characters/char8.png",
+        "video": "videos/placeholder.mp4"
     }
 ];
 
