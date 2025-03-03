@@ -32,7 +32,7 @@ const characterData = [
         "name": "GuestGuide",
         "industry": "Hospitality",
         "image": "images/characters/char5.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/video5.mp4"
     },
     {
         "id": 6,
