@@ -129,10 +129,14 @@ document.addEventListener('DOMContentLoaded', function() {
             isMusicPlaying = false;
         }
 
+        // Find the character data for the given ID
+        const character = characterData.find(char => char.id == characterId);
+
         setTimeout(() => {
-            const videoPath = `videos/video${characterId}.mp4`;
+            //Uses the video path from the character data
+            const videoPath = character.video;
             video.src = videoPath;
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
             hideLoading();
             video.play();
             isModalOpen = true;
