@@ -54,6 +54,13 @@ const characterData = [
         "industry": "Financial Services",
         "image": "images/characters/char8.png",
         "video": "videos/placeholder.mp4"
+    },
+    {
+        "id": 9,
+        "name": "Network Nova",
+        "industry": "Channel Partners",
+        "image": "images/characters/char9.png",
+        "video": "videos/placeholder.mp4"
     }
 ];
 
