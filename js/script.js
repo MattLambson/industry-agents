@@ -3,63 +3,63 @@ const characterData = [
         "id": 1,
         "name": "HAVoC",
         "industry": "Trades/Service",
-        "image": "images/characters/char1.png",
-        "video": "videos/video1.mp4"
+        "image": "images/characters/HAVoC.png",
+        "video": "videos/HAVoC.mp4"
     },
     {
         "id": 2,
         "name": "PricePilot",
         "industry": "Retail Industry",
-        "image": "images/characters/char2.png",
+        "image": "images/characters/PricePilot.png",
         "video": "videos/placeholder.mp4"
     },
     {
         "id": 3,
         "name": "Fillaform",
         "industry": "Customer Support",
-        "image": "images/characters/char3.png",
+        "image": "images/characters/Fillaform.png",
         "video": "videos/placeholder.mp4"
     },
     {
         "id": 4,
         "name": "Scholar",
         "industry": "Edu/Universities",
-        "image": "images/characters/char4.png",
-        "video": "videos/video4.mp4"
+        "image": "images/characters/Scholar.png",
+        "video": "videos/Scholar.mp4"
     },
     {
         "id": 5,
         "name": "GuestGuide",
         "industry": "Hospitality",
-        "image": "images/characters/char5.png",
-        "video": "videos/video5.mp4"
+        "image": "images/characters/GuestGuide.png",
+        "video": "videos/GuestGuide.mp4"
     },
     {
         "id": 6,
         "name": "Navigator",
         "industry": "Business Operations",
-        "image": "images/characters/char6.png",
+        "image": "images/characters/Navigator.png",
         "video": "videos/placeholder.mp4"
     },
     {
         "id": 7,
         "name": "The Home Ranger",
         "industry": "Real Estate",
-        "image": "images/characters/char7.png",
-        "video": "videos/video7.mp4"
+        "image": "images/characters/HomeRanger.png",
+        "video": "videos/HomeRanger.mp4"
     },
     {
         "id": 8,
         "name": "Teller",
         "industry": "Financial Services",
-        "image": "images/characters/char8.png",
+        "image": "images/characters/Teller.png",
         "video": "videos/placeholder.mp4"
     },
     {
         "id": 9,
         "name": "Network Nova",
         "industry": "Channel Partners",
-        "image": "images/characters/char9.png",
+        "image": "images/characters/NetworkNova.png",
         "video": "videos/placeholder.mp4"
     }
 ];
