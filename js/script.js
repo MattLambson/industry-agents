@@ -1,10 +1,10 @@
 const characterData = [
     {
         "id": 1,
-        "name": "HAVoC",
-        "industry": "Trades/Service",
-        "image": "images/characters/HAVoC.png",
-        "video": "videos/HAVoC.mp4"
+        "name": "Network Nova",
+        "industry": "Channel Partners",
+        "image": "images/characters/NetworkNova.png",
+        "video": "videos/placeholder.mp4"
     },
     {
         "id": 2,
@@ -22,17 +22,17 @@ const characterData = [
     },
     {
         "id": 4,
-        "name": "Scholar",
-        "industry": "Edu/Universities",
-        "image": "images/characters/Scholar.png",
-        "video": "videos/Scholar.mp4"
-    },
-    {
-        "id": 5,
         "name": "GuestGuide",
         "industry": "Hospitality",
         "image": "images/characters/GuestGuide.png",
         "video": "videos/GuestGuide.mp4"
+    },
+    {
+        "id": 5,
+        "name": "Teller",
+        "industry": "Financial Services",
+        "image": "images/characters/Teller.png",
+        "video": "videos/placeholder.mp4"
     },
     {
         "id": 6,
@@ -50,17 +50,17 @@ const characterData = [
     },
     {
         "id": 8,
-        "name": "Teller",
-        "industry": "Financial Services",
-        "image": "images/characters/Teller.png",
-        "video": "videos/placeholder.mp4"
+        "name": "Scholar",
+        "industry": "Edu/Universities",
+        "image": "images/characters/Scholar.png",
+        "video": "videos/Scholar.mp4"
     },
     {
         "id": 9,
-        "name": "Network Nova",
-        "industry": "Channel Partners",
-        "image": "images/characters/NetworkNova.png",
-        "video": "videos/placeholder.mp4"
+        "name": "HAVoC",
+        "industry": "Trades/Service",
+        "image": "images/characters/HAVoC.png",
+        "video": "videos/HAVoC.mp4"
     }
 ];
 
