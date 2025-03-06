@@ -2,23 +2,23 @@ const characterData = [
     {
         "id": 1,
         "name": "Network Nova",
-        "industry": "Channel Partners",
+        "industry": "Channel Managers",
         "image": "images/characters/NetworkNova.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/NetworkNova.mp4"
     },
     {
         "id": 2,
         "name": "PricePilot",
         "industry": "Retail Industry",
         "image": "images/characters/PricePilot.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/PricePilot.mp4"
     },
     {
         "id": 3,
         "name": "Fillaform",
         "industry": "Customer Support",
         "image": "images/characters/Fillaform.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/Fillaform.mp4"
     },
     {
         "id": 4,
@@ -32,14 +32,14 @@ const characterData = [
         "name": "Teller",
         "industry": "Financial Services",
         "image": "images/characters/Teller.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/Teller.mp4"
     },
     {
         "id": 6,
         "name": "Navigator",
         "industry": "Business Operations",
         "image": "images/characters/Navigator.png",
-        "video": "videos/placeholder.mp4"
+        "video": "videos/Navigator.mp4"
     },
     {
         "id": 7,
