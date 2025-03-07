@@ -368,3 +368,87 @@ body.modal-open .sidebar {
     filter: brightness(0.3);
     transition: filter 0.3s ease;
 }
+/* On-screen controls for touchscreen */
+.on-screen-controls {
+    position: fixed;
+    bottom: 120px; /* Position above the controls-hint */
+    left: 20px;
+    display: flex;
+    flex-direction: column; /* Stack d-pad above action buttons */
+    align-items: flex-start;
+    gap: 15px;
+    max-width: 200px;
+  }
+  
+  .d-pad {
+    position: relative;
+    width: 90px; /* Smaller size */
+    height: 90px; /* Smaller size */
+  }
+  
+  .arrow-btn {
+    position: absolute;
+    width: 30px; /* Smaller buttons */
+    height: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px; /* Smaller font */
+    transition: all 0.2s ease;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+  }
+  
+  .up-btn { top: 0; left: 30px; }
+  .left-btn { top: 30px; left: 0; }
+  .right-btn { top: 30px; left: 60px; }
+  .down-btn { top: 60px; left: 30px; }
+  
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .action-btn {
+    width: 30px; /* Smaller buttons */
+    height: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px; /* Smaller font */
+    transition: all 0.2s ease;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+  }
+  
+  .b-btn { background: rgba(255, 100, 100, 0.3); }
+  .a-btn { background: rgba(100, 255, 100, 0.3); }
+  .start-btn { 
+    width: 60px; /* Smaller button */
+    height: 25px; /* Custom height for START */
+    border-radius: 8px;
+    font-size: 9px; /* Smaller font */
+    background: rgba(150, 150, 150, 0.3);
+  }
+  
+  .arrow-btn:hover, .action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+  }
+  
+  .arrow-btn:active, .action-btn:active {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0.95);
+  }

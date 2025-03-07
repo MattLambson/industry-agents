@@ -19,12 +19,19 @@
         <div class="character-grid">
             <!-- Characters will be dynamically inserted here -->
         </div>
-
-        <div class="controls-hint">
-            <p>Use arrow keys to navigate</p>
-            <p>Press ENTER to select</p>
-            <p>Press M to toggle music</p>
-        </div>
+        <div class="on-screen-controls">
+            <div class="d-pad">
+              <button class="arrow-btn up-btn" data-key="ArrowUp">▲</button>
+              <button class="arrow-btn left-btn" data-key="ArrowLeft">◀</button>
+              <button class="arrow-btn right-btn" data-key="ArrowRight">▶</button>
+              <button class="arrow-btn down-btn" data-key="ArrowDown">▼</button>
+            </div>
+            <div class="action-buttons">
+              <button class="action-btn b-btn" data-key="KeyB">B</button>
+              <button class="action-btn a-btn" data-key="KeyA">A</button>
+              <button class="action-btn start-btn" data-key="CustomStart">START</button>
+            </div>
+          </div>
 
         <div id="videoModal" class="modal">
             <div class="modal-content">

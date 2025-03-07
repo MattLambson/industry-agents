@@ -102,11 +102,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const video = document.getElementById('characterVideo');
     const closeButton = document.querySelector('.close-button');
     const loadingOverlay = document.getElementById('loadingOverlay');
-    const bgMusic = document.getElementById('bgMusic');
     
     let currentSelected = 0;
     let isModalOpen = false;
-    let isMusicPlaying = false;
     let currentCharacterId = null;
     
     // Initialize first character as selected
@@ -168,10 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Store the current character ID
         currentCharacterId = characterId;
         
-        if (isMusicPlaying) {
-            bgMusic.pause();
-            isMusicPlaying = false;
-        }
         
         // Find the character data for the selected ID
         const character = characterData.find(char => char.id == characterId);
@@ -311,18 +305,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const characterId = selectedChar.dataset.id;
                 playCharacterVideo(characterId);
                 break;
-            case 'm':
-            case 'M':
-                if (!isModalOpen) {  // Only toggle music if no video is playing
-                    if (isMusicPlaying) {
-                        bgMusic.pause();
-                        isMusicPlaying = false;
-                    } else {
-                        bgMusic.play();
-                        isMusicPlaying = true;
-                    }
-                }
-                break;
         }
     });
     
@@ -420,4 +402,36 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(() => console.log(`✓ Video exists: ${char.video}`))
             .catch(err => console.error(`✗ ${err.message}`));
     });
+// Handle on-screen controls
+document.querySelectorAll('.arrow-btn, .action-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const key = this.dataset.key;
+      
+      // Special case for Start button
+      if (key === 'CustomStart') {
+        // Only activate if we're on the main selection screen and not in a modal
+        if (!isModalOpen) {
+          const selectedChar = characters[currentSelected];
+          const characterId = selectedChar.dataset.id;
+          playCharacterVideo(characterId);
+        }
+        return;
+      }
+      
+      // Create and dispatch a keyboard event for other buttons
+      const event = new KeyboardEvent('keydown', {
+        key: key === 'KeyA' ? 'a' : key === 'KeyB' ? 'b' : key,
+        code: key,
+        bubbles: true
+      });
+      
+      document.dispatchEvent(event);
+      
+      // Add visual feedback
+      this.classList.add('active');
+      setTimeout(() => {
+        this.classList.remove('active');
+      }, 200);
+    });
+  });
 });
