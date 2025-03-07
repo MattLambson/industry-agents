@@ -299,9 +299,9 @@ h1 {
     }
 }
 
-/* Image Modal styles - Added for fullsize image viewing */
+/* Image Modal styles */
 #imageModal {
-    display: none;
+    display: none !important; /* Start hidden */
     position: fixed;
     top: 0;
     left: 0;
@@ -313,6 +313,9 @@ h1 {
     align-items: center;
 }
 
+#imageModal[style*="flex"] {
+    display: flex !important;
+}
 #fullSizeImage {
     max-width: 90%;
     max-height: 90vh;
@@ -321,6 +324,14 @@ h1 {
 }
 
 /* Style for making the photo boxes appear clickable */
+/* Update the photo-box CSS to control image size */
 .photo-box {
     cursor: pointer;
+}
+
+.photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Changed from cover to contain */
+    padding: 10px; /* Add some padding */
 }

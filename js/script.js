@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Play character video function - UPDATED to handle <source> element
+    // FIXED: Play character video function
     function playCharacterVideo(characterId) {
         showLoading();
         
@@ -162,29 +162,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Use the video path from the character data
             const videoPath = character.video;
             
-            // UPDATED: Handle video with <source> element correctly
-            const sourceElement = video.querySelector('source');
-            if (sourceElement) {
-                sourceElement.src = videoPath;
-                video.load(); // Important: must call load() after changing source
-            } else {
-                video.src = videoPath; // Fallback to direct src setting
-            }
+            // FIXED: Set the video source properly
+            video.src = videoPath;
             
             modal.style.display = 'flex';
             hideLoading();
-            video.play();
+            video.play().catch(error => {
+                console.error("Error playing video:", error);
+            });
             isModalOpen = true;
-            
-            // TEST: Force redirection after 8 seconds (you can remove this later)
-            setTimeout(() => {
-                console.log("TEST: Forced redirection timeout triggered");
-                console.log("Current character ID:", currentCharacterId);
-                if (currentCharacterId) {
-                    redirectToCharacterPage(currentCharacterId);
-                }
-            }, 8000); // 8 seconds gives you time to see if it works
-            
         }, 1000);
     }
     
@@ -201,16 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     closeButton.addEventListener('click', () => {
         video.pause();
-        
-        // UPDATED: Clear source for both approaches
-        const sourceElement = video.querySelector('source');
-        if (sourceElement) {
-            sourceElement.src = '';
-            video.load();
-        } else {
-            video.src = '';
-        }
-        
+        video.src = '';
         modal.style.display = 'none';
         isModalOpen = false;
         currentCharacterId = null; // Reset current character ID
@@ -221,9 +198,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // }
     });
     
-    // Add event listener for video end - UPDATED with better logging
+    // Add event listener for video end
     video.addEventListener('ended', function() {
-        console.log("Video ended event fired (addEventListener method)");
+        console.log("Video ended event fired");
         console.log("Current character ID:", currentCharacterId);
         
         if (currentCharacterId) {
@@ -234,13 +211,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // ADDED: Alternative onended approach for better compatibility
+    // Added alternative onended approach for better compatibility
     video.onended = function() {
         console.log("Video ended event fired (onended property)");
-        console.log("Current character ID:", currentCharacterId);
-        
         if (currentCharacterId) {
-            console.log("Attempting to redirect from onended");
             redirectToCharacterPage(currentCharacterId);
         }
     };
@@ -303,4 +277,52 @@ document.addEventListener('DOMContentLoaded', function() {
             closeButton.click();
         }
     });
+    
+    // ADDED: Image Modal Functionality for character pages
+    // Only initialize if we're on a character page with photo boxes
+    const photoBoxes = document.querySelectorAll('.photo-box');
+    if (photoBoxes.length > 0) {
+        const imageModal = document.getElementById('imageModal');
+        const fullSizeImage = document.getElementById('fullSizeImage');
+        const imageCloseButton = document.getElementById('imageCloseButton');
+        
+        // Make sure the modal is hidden initially
+        if (imageModal) {
+            imageModal.style.display = 'none';
+            
+            // Add click event to each photo box
+            photoBoxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    const img = this.querySelector('img');
+                    if (img) {
+                        // Set the full-size image source
+                        fullSizeImage.src = img.src;
+                        fullSizeImage.alt = img.alt;
+                        
+                        // Display the modal
+                        imageModal.style.display = 'flex';
+                    }
+                });
+            });
+            
+            // Close modal when clicking the close button
+            imageCloseButton.addEventListener('click', function() {
+                imageModal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside the image
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === imageModal) {
+                    imageModal.style.display = 'none';
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && imageModal.style.display === 'flex') {
+                    imageModal.style.display = 'none';
+                }
+            });
+        }
+    }
 });
