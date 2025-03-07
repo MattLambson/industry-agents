@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        const gridColumns = 4;
+        const gridColumns = 3;
         const totalCharacters = characters.length;
         
         switch(e.key) {
@@ -333,66 +333,85 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
- // Image Modal Functionality
-const photoBoxes = document.querySelectorAll('.photo-box');
-if (photoBoxes.length > 0) {
-    const imageModal = document.getElementById('imageModal');
-    const fullSizeImage = document.getElementById('fullSizeImage');
-    const imageCloseButton = document.getElementById('imageCloseButton');
-    
-    // Make sure these elements exist
-    if (imageModal && fullSizeImage && imageCloseButton) {
-        // Add click event to each photo box
-        photoBoxes.forEach(box => {
-            box.addEventListener('click', function(e) {
-                e.preventDefault();
+    // Image Modal Functionality - UPDATED VERSION
+    const photoBoxes = document.querySelectorAll('.photo-box');
+    if (photoBoxes.length > 0) {
+        const imageModal = document.getElementById('imageModal');
+        const fullSizeImage = document.getElementById('fullSizeImage');
+        const imageCloseButton = document.getElementById('imageCloseButton');
+        
+        // Make sure these elements exist
+        if (imageModal && fullSizeImage && imageCloseButton) {
+            // Make sure the modal and close button are properly hidden at start
+            imageModal.style.display = 'none';
+            imageCloseButton.style.opacity = '0'; // Hide the close button initially
+            
+            // Add click event to each photo box
+            photoBoxes.forEach(box => {
+                box.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const img = this.querySelector('img');
+                    if (img) {
+                        // Set the full-size image source
+                        fullSizeImage.src = img.src;
+                        fullSizeImage.alt = "";
+                        
+                        // Display the modal with theater mode effect
+                        imageModal.style.display = 'flex';
+                        imageModal.style.backgroundColor = 'rgba(0, 0, 0, 0.85)'; // Darker background
+                        
+                        // Animate the appearance for theater effect
+                        setTimeout(() => {
+                            imageModal.style.opacity = '1';
+                            imageCloseButton.style.opacity = '1'; // Show the close button
+                        }, 10);
+                        
+                        document.body.classList.add('modal-open');
+                        
+                        // Prevent scrolling
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+            
+            // Close modal function
+            function closeImageModal() {
+                // Animate closing
+                imageModal.style.opacity = '0';
+                imageCloseButton.style.opacity = '0';
                 
-                const img = this.querySelector('img');
-                if (img) {
-                    // Set the full-size image source
-                    fullSizeImage.src = img.src;
-                    fullSizeImage.alt = "";
+                // Delay the actual hiding to allow for animation
+                setTimeout(() => {
+                    imageModal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
                     
-                    // Display the modal
-                    imageModal.style.display = 'flex';
-                    document.body.classList.add('modal-open');
-                    
-                    // Prevent scrolling
-                    document.body.style.overflow = 'hidden';
+                    // Clear the image source when closed
+                    setTimeout(() => {
+                        fullSizeImage.src = '';
+                    }, 300);
+                }, 300); // Match transition duration
+            }
+            
+            // Close modal when clicking the close button
+            imageCloseButton.addEventListener('click', closeImageModal);
+            
+            // Close modal when clicking outside the image
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === imageModal) {
+                    closeImageModal();
                 }
             });
-        });
-        
-        // Close modal function
-        function closeImageModal() {
-            imageModal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = '';
             
-            // Clear the image source when closed
-            setTimeout(() => {
-                fullSizeImage.src = '';
-            }, 300);
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && imageModal.style.display === 'flex') {
+                    closeImageModal();
+                }
+            });
         }
-        
-        // Close modal when clicking the close button
-        imageCloseButton.addEventListener('click', closeImageModal);
-        
-        // Close modal when clicking outside the image
-        imageModal.addEventListener('click', function(e) {
-            if (e.target === imageModal) {
-                closeImageModal();
-            }
-        });
-        
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && imageModal.style.display === 'flex') {
-                closeImageModal();
-            }
-        });
     }
-}
     
     // Run a check of all video files at startup to see if they exist
     console.log("Checking if video files exist...");
