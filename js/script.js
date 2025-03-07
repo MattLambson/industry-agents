@@ -2,7 +2,7 @@ const characterData = [
     {
         "id": 1,
         "name": "Network Nova",
-        "industry": "Channel Partners",
+        "industry": "Channel Manager",
         "image": "images/characters/NetworkNova.png",
         "video": "videos/networknova.mp4",
         "pageUrl": "characters/network-nova.html"
