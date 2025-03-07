@@ -350,10 +350,18 @@ body.modal-open .sidebar {
     border-radius: 4px;
 }
 
-/* Make images in photo boxes contained */
+.photo-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Remove fixed height constraint */
+    min-height: 250px; /* Minimum height but allow expansion */
+}
+
 .photo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Show full image */
-    padding: 10px;
+    width: auto; /* Don't force width to 100% */
+    height: auto; /* Don't force height to 100% */
+    max-width: 100%; /* Ensure it fits within container width */
+    max-height: 100%; /* Ensure it fits within container height */
+    object-fit: contain; /* Maintain aspect ratio */
 }
