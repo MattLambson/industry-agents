@@ -4,7 +4,7 @@ const characterData = [
         "name": "Network Nova",
         "industry": "Channel Managers",
         "image": "images/characters/NetworkNova.png",
-        "video": "videos/networknova.mp4",
+        "video": "videos/NetworkNova.mp4",
         "pageUrl": "characters/network-nova.html"
     },
     {
@@ -12,7 +12,7 @@ const characterData = [
         "name": "PricePilot",
         "industry": "Retail Industry",
         "image": "images/characters/PricePilot.png",
-        "video": "videos/pricepilot.mp4",
+        "video": "videos/PricePilot.mp4",
         "pageUrl": "characters/price-pilot.html"
     },
     {
@@ -20,7 +20,7 @@ const characterData = [
         "name": "Fillaform",
         "industry": "Customer Support",
         "image": "images/characters/Fillaform.png",
-        "video": "videos/fillaform.mp4",
+        "video": "videos/Fillaform.mp4",
         "pageUrl": "characters/fillaform.html"
     },
     {
@@ -36,7 +36,7 @@ const characterData = [
         "name": "Teller",
         "industry": "Financial Services",
         "image": "images/characters/Teller.png",
-        "video": "videos/teller.mp4",
+        "video": "videos/Teller.mp4",
         "pageUrl": "characters/teller.html"
     },
     {
@@ -44,7 +44,7 @@ const characterData = [
         "name": "Navigator",
         "industry": "Business Support",
         "image": "images/characters/Navigator.png",
-        "video": "videos/navigator.mp4",
+        "video": "videos/Navigator.mp4",
         "pageUrl": "characters/navigator.html"
     },
     {
@@ -143,7 +143,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // FIXED: Play character video function
+    // Function to check if video files exist (for debugging)
+    function checkVideoFile(url) {
+        return new Promise((resolve, reject) => {
+            const req = new XMLHttpRequest();
+            req.open('HEAD', url, true);
+            req.onload = function() {
+                if (req.status >= 200 && req.status < 300) {
+                    resolve(true);
+                } else {
+                    reject(new Error(`File at ${url} not found (status ${req.status})`));
+                }
+            };
+            req.onerror = function() {
+                reject(new Error(`Network error while checking ${url}`));
+            };
+            req.send();
+        });
+    }
+    
     function playCharacterVideo(characterId) {
         showLoading();
         
@@ -157,21 +175,53 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Find the character data for the selected ID
         const character = characterData.find(char => char.id == characterId);
+        console.log("Playing video for:", character.name);
+        console.log("Video path:", character.video);
         
-        setTimeout(() => {
-            // Use the video path from the character data
-            const videoPath = character.video;
-            
-            // FIXED: Set the video source properly
-            video.src = videoPath;
-            
-            modal.style.display = 'flex';
-            hideLoading();
-            video.play().catch(error => {
-                console.error("Error playing video:", error);
+        // First verify that the video file exists
+        checkVideoFile(character.video)
+            .then(exists => {
+                console.log(`Video file exists: ${character.video}`);
+                setTimeout(() => {
+                    // Get the source element inside the video tag
+                    const sourceElement = video.querySelector('source');
+                    
+                    // Set the video source properly
+                    if (sourceElement) {
+                        // Using source element
+                        sourceElement.src = character.video;
+                        sourceElement.type = "video/mp4";
+                        // Important: need to call load() after changing source
+                        video.load();
+                    } else {
+                        // Direct setting (fallback)
+                        video.src = character.video;
+                    }
+                    
+                    modal.style.display = 'flex';
+                    hideLoading();
+                    
+                    // Play the video with error handling
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.error("Error playing video:", error);
+                            console.log("Video element:", video);
+                            console.log("Current video source:", sourceElement ? sourceElement.src : video.src);
+                            
+                            alert("There was an error playing the video. Please try again later.");
+                            closeButton.click(); // Close the modal
+                        });
+                    }
+                    
+                    isModalOpen = true;
+                }, 1000);
+            })
+            .catch(error => {
+                console.error(error);
+                alert(`Could not find the video file: ${character.video}\n\nPlease check that the file exists and has the correct filename (case sensitive).`);
+                hideLoading();
             });
-            isModalOpen = true;
-        }, 1000);
     }
     
     // Event Listeners
@@ -185,20 +235,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // FIXED: Close button handler properly clearing the source
     closeButton.addEventListener('click', () => {
         video.pause();
-        video.src = '';
+        
+        // Clear the source element properly
+        const sourceElement = video.querySelector('source');
+        if (sourceElement) {
+            sourceElement.src = '';
+            video.load(); // Need to reload after changing source
+        } else {
+            video.src = ''; // Fallback
+        }
+        
         modal.style.display = 'none';
         isModalOpen = false;
         currentCharacterId = null; // Reset current character ID
-        // Optionally, if you want the music to resume after closing the video:
-        // if (!isMusicPlaying) {
-        //     bgMusic.play();
-        //     isMusicPlaying = true;
-        // }
     });
     
-    // Add event listener for video end
+    // Video ended event listeners
     video.addEventListener('ended', function() {
         console.log("Video ended event fired");
         console.log("Current character ID:", currentCharacterId);
@@ -211,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Added alternative onended approach for better compatibility
+    // Alternative onended approach for older browsers
     video.onended = function() {
         console.log("Video ended event fired (onended property)");
         if (currentCharacterId) {
@@ -278,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // ADDED: Image Modal Functionality for character pages
+    // FIXED: Image Modal Functionality for character pages
     // Only initialize if we're on a character page with photo boxes
     const photoBoxes = document.querySelectorAll('.photo-box');
     if (photoBoxes.length > 0) {
@@ -288,7 +343,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Make sure the modal is hidden initially
         if (imageModal) {
+            // Force hide the modal with style attribute
             imageModal.style.display = 'none';
+            
+            // Make sure fullSizeImage has no default src
+            if (fullSizeImage) {
+                fullSizeImage.src = '';
+            }
             
             // Add click event to each photo box
             photoBoxes.forEach(box => {
@@ -306,23 +367,30 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // Close modal when clicking the close button
-            imageCloseButton.addEventListener('click', function() {
-                imageModal.style.display = 'none';
-            });
+            if (imageCloseButton) {
+                imageCloseButton.addEventListener('click', function() {
+                    imageModal.style.display = 'none';
+                    // Clear the image source when closing
+                    fullSizeImage.src = '';
+                });
+            }
             
             // Close modal when clicking outside the image
             imageModal.addEventListener('click', function(e) {
                 if (e.target === imageModal) {
                     imageModal.style.display = 'none';
-                }
-            });
-            
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && imageModal.style.display === 'flex') {
-                    imageModal.style.display = 'none';
+                    // Clear the image source when closing
+                    fullSizeImage.src = '';
                 }
             });
         }
     }
+    
+    // Run a check of all video files at startup to see if they exist
+    console.log("Checking if video files exist...");
+    characterData.forEach(char => {
+        checkVideoFile(char.video)
+            .then(() => console.log(`✓ Video exists: ${char.video}`))
+            .catch(err => console.error(`✗ ${err.message}`));
+    });
 });

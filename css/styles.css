@@ -299,9 +299,9 @@ h1 {
     }
 }
 
-/* Image Modal styles */
+/* Ensure image modal is properly hidden and positioned */
 #imageModal {
-    display: none !important; /* Start hidden */
+    display: none !important; /* Ensure it's hidden */
     position: fixed;
     top: 0;
     left: 0;
@@ -309,29 +309,25 @@ h1 {
     height: 100%;
     background: rgba(0, 0, 0, 0.9);
     z-index: 1000;
+}
+
+/* Override when displayed by JavaScript */
+#imageModal[style*="flex"] {
+    display: flex !important;
     justify-content: center;
     align-items: center;
 }
 
-#imageModal[style*="flex"] {
-    display: flex !important;
-}
 #fullSizeImage {
     max-width: 90%;
     max-height: 90vh;
     object-fit: contain;
-    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Style for making the photo boxes appear clickable */
-/* Update the photo-box CSS to control image size */
-.photo-box {
-    cursor: pointer;
-}
-
+/* Make images in photo boxes contained */
 .photo-box img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Changed from cover to contain */
-    padding: 10px; /* Add some padding */
+    object-fit: contain; /* Show full image */
+    padding: 10px;
 }
