@@ -9,30 +9,12 @@
 </head>
 <body>
     <div class="background-overlay"></div>
-    
-    <audio id="bgMusic" loop>
-        <source src="audio/background.mp3" type="audio/mp3">
-    </audio>
     <div class="game-container">
         <h1>Select Your Industry Agent</h1>
         
         <div class="character-grid">
             <!-- Characters will be dynamically inserted here -->
         </div>
-        <div class="on-screen-controls">
-            <div class="d-pad">
-              <button class="arrow-btn up-btn" data-key="ArrowUp">▲</button>
-              <button class="arrow-btn left-btn" data-key="ArrowLeft">◀</button>
-              <button class="arrow-btn right-btn" data-key="ArrowRight">▶</button>
-              <button class="arrow-btn down-btn" data-key="ArrowDown">▼</button>
-            </div>
-            <div class="action-buttons">
-              <button class="action-btn b-btn" data-key="KeyB">B</button>
-              <button class="action-btn a-btn" data-key="KeyA">A</button>
-              <button class="action-btn start-btn" data-key="CustomStart">START</button>
-            </div>
-          </div>
-
         <div id="videoModal" class="modal">
             <div class="modal-content">
                 <span class="close-button">&times;</span>
@@ -44,11 +26,23 @@
                 </div>
             </div>
         </div>
-
         <div id="loadingOverlay" class="loading-overlay">
             <div class="loading-spinner"></div>
             <div class="loading-text">Loading...</div>
         </div>
+        <div class="on-screen-controls">
+            <div class="d-pad">
+              <button class="arrow-btn up-btn" data-key="ArrowUp">▲</button>
+              <button class="arrow-btn left-btn" data-key="ArrowLeft">◀</button>
+              <button class="arrow-btn right-btn" data-key="ArrowRight">▶</button>
+              <button class="arrow-btn down-btn" data-key="ArrowDown">▼</button>
+            </div>
+            <div class="action-buttons">
+              <button class="action-btn b-btn" data-key="KeyB">B</button>
+              <button class="action-btn a-btn" data-key="KeyA">A</button>
+              <button class="action-btn start-btn" data-key="Enter">START</button>
+            </div>
+          </div>
     </div>
     <script src="js/script.js"></script>
 </body>
