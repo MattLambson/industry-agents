@@ -333,58 +333,66 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // FIXED: Image Modal Functionality for character pages
-    // Only initialize if we're on a character page with photo boxes
-    const photoBoxes = document.querySelectorAll('.photo-box');
-    if (photoBoxes.length > 0) {
-        const imageModal = document.getElementById('imageModal');
-        const fullSizeImage = document.getElementById('fullSizeImage');
-        const imageCloseButton = document.getElementById('imageCloseButton');
-        
-        // Make sure the modal is hidden initially
-        if (imageModal) {
-            // Force hide the modal with style attribute
-            imageModal.style.display = 'none';
-            
-            // Make sure fullSizeImage has no default src
-            if (fullSizeImage) {
-                fullSizeImage.src = '';
-            }
-            
-            // Add click event to each photo box
-            photoBoxes.forEach(box => {
-                box.addEventListener('click', function() {
-                    const img = this.querySelector('img');
-                    if (img) {
-                        // Set the full-size image source
-                        fullSizeImage.src = img.src;
-                        fullSizeImage.alt = img.alt;
-                        
-                        // Display the modal
-                        imageModal.style.display = 'flex';
-                    }
-                });
-            });
-            
-            // Close modal when clicking the close button
-            if (imageCloseButton) {
-                imageCloseButton.addEventListener('click', function() {
-                    imageModal.style.display = 'none';
-                    // Clear the image source when closing
-                    fullSizeImage.src = '';
-                });
-            }
-            
-            // Close modal when clicking outside the image
-            imageModal.addEventListener('click', function(e) {
-                if (e.target === imageModal) {
-                    imageModal.style.display = 'none';
-                    // Clear the image source when closing
-                    fullSizeImage.src = '';
+ // Image Modal Functionality
+const photoBoxes = document.querySelectorAll('.photo-box');
+if (photoBoxes.length > 0) {
+    const imageModal = document.getElementById('imageModal');
+    const fullSizeImage = document.getElementById('fullSizeImage');
+    const imageCloseButton = document.getElementById('imageCloseButton');
+    
+    // Make sure these elements exist
+    if (imageModal && fullSizeImage && imageCloseButton) {
+        // Add click event to each photo box
+        photoBoxes.forEach(box => {
+            box.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const img = this.querySelector('img');
+                if (img) {
+                    // Set the full-size image source
+                    fullSizeImage.src = img.src;
+                    fullSizeImage.alt = "";
+                    
+                    // Display the modal
+                    imageModal.style.display = 'flex';
+                    document.body.classList.add('modal-open');
+                    
+                    // Prevent scrolling
+                    document.body.style.overflow = 'hidden';
                 }
             });
+        });
+        
+        // Close modal function
+        function closeImageModal() {
+            imageModal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            
+            // Clear the image source when closed
+            setTimeout(() => {
+                fullSizeImage.src = '';
+            }, 300);
         }
+        
+        // Close modal when clicking the close button
+        imageCloseButton.addEventListener('click', closeImageModal);
+        
+        // Close modal when clicking outside the image
+        imageModal.addEventListener('click', function(e) {
+            if (e.target === imageModal) {
+                closeImageModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && imageModal.style.display === 'flex') {
+                closeImageModal();
+            }
+        });
     }
+}
     
     // Run a check of all video files at startup to see if they exist
     console.log("Checking if video files exist...");
