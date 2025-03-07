@@ -2,7 +2,7 @@ const characterData = [
     {
         "id": 1,
         "name": "Network Nova",
-        "industry": "Channel Manager",
+        "industry": "Channel Managers",
         "image": "images/characters/NetworkNova.png",
         "video": "videos/networknova.mp4",
         "pageUrl": "characters/network-nova.html"
@@ -72,7 +72,6 @@ const characterData = [
         "pageUrl": "characters/havoc.html"
     }
 ];
-
 document.addEventListener('DOMContentLoaded', function() {
     // Function to create character grid
     function createCharacterGrid() {
@@ -132,13 +131,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to redirect to character-specific page
     function redirectToCharacterPage(characterId) {
+        console.log("Redirect function called with ID:", characterId);
         const character = characterData.find(char => char.id == characterId);
+        console.log("Found character:", character);
+        
         if (character && character.pageUrl) {
+            console.log("Redirecting to:", character.pageUrl);
             window.location.href = character.pageUrl;
+        } else {
+            console.log("No valid pageUrl found");
         }
     }
     
-    // Play character video function
+    // Play character video function - UPDATED to handle <source> element
     function playCharacterVideo(characterId) {
         showLoading();
         
@@ -156,11 +161,30 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             // Use the video path from the character data
             const videoPath = character.video;
-            video.src = videoPath;
-            modal.style.display = 'flex'; // Changed from 'block' to 'flex'
+            
+            // UPDATED: Handle video with <source> element correctly
+            const sourceElement = video.querySelector('source');
+            if (sourceElement) {
+                sourceElement.src = videoPath;
+                video.load(); // Important: must call load() after changing source
+            } else {
+                video.src = videoPath; // Fallback to direct src setting
+            }
+            
+            modal.style.display = 'flex';
             hideLoading();
             video.play();
             isModalOpen = true;
+            
+            // TEST: Force redirection after 8 seconds (you can remove this later)
+            setTimeout(() => {
+                console.log("TEST: Forced redirection timeout triggered");
+                console.log("Current character ID:", currentCharacterId);
+                if (currentCharacterId) {
+                    redirectToCharacterPage(currentCharacterId);
+                }
+            }, 8000); // 8 seconds gives you time to see if it works
+            
         }, 1000);
     }
     
@@ -177,7 +201,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     closeButton.addEventListener('click', () => {
         video.pause();
-        video.src = '';
+        
+        // UPDATED: Clear source for both approaches
+        const sourceElement = video.querySelector('source');
+        if (sourceElement) {
+            sourceElement.src = '';
+            video.load();
+        } else {
+            video.src = '';
+        }
+        
         modal.style.display = 'none';
         isModalOpen = false;
         currentCharacterId = null; // Reset current character ID
@@ -188,13 +221,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // }
     });
     
-    // Add event listener for video end
+    // Add event listener for video end - UPDATED with better logging
     video.addEventListener('ended', function() {
-        // Redirect to the character's page when the video ends
+        console.log("Video ended event fired (addEventListener method)");
+        console.log("Current character ID:", currentCharacterId);
+        
         if (currentCharacterId) {
+            console.log("Attempting to redirect to character page");
             redirectToCharacterPage(currentCharacterId);
+        } else {
+            console.log("No current character ID set");
         }
     });
+    
+    // ADDED: Alternative onended approach for better compatibility
+    video.onended = function() {
+        console.log("Video ended event fired (onended property)");
+        console.log("Current character ID:", currentCharacterId);
+        
+        if (currentCharacterId) {
+            console.log("Attempting to redirect from onended");
+            redirectToCharacterPage(currentCharacterId);
+        }
+    };
     
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
