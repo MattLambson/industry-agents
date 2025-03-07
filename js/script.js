@@ -2,65 +2,74 @@ const characterData = [
     {
         "id": 1,
         "name": "Network Nova",
-        "industry": "Channel Managers",
+        "industry": "Channel Partners",
         "image": "images/characters/NetworkNova.png",
-        "video": "videos/NetworkNova.mp4"
+        "video": "videos/networknova.mp4",
+        "pageUrl": "characters/network-nova.html"
     },
     {
         "id": 2,
         "name": "PricePilot",
         "industry": "Retail Industry",
         "image": "images/characters/PricePilot.png",
-        "video": "videos/PricePilot.mp4"
+        "video": "videos/pricepilot.mp4",
+        "pageUrl": "characters/price-pilot.html"
     },
     {
         "id": 3,
         "name": "Fillaform",
         "industry": "Customer Support",
         "image": "images/characters/Fillaform.png",
-        "video": "videos/Fillaform.mp4"
+        "video": "videos/fillaform.mp4",
+        "pageUrl": "characters/fillaform.html"
     },
     {
         "id": 4,
         "name": "GuestGuide",
         "industry": "Hospitality",
         "image": "images/characters/GuestGuide.png",
-        "video": "videos/GuestGuide.mp4"
+        "video": "videos/GuestGuide.mp4",
+        "pageUrl": "characters/guest-guide.html"
     },
     {
         "id": 5,
         "name": "Teller",
         "industry": "Financial Services",
         "image": "images/characters/Teller.png",
-        "video": "videos/Teller.mp4"
+        "video": "videos/teller.mp4",
+        "pageUrl": "characters/teller.html"
     },
     {
         "id": 6,
         "name": "Navigator",
-        "industry": "Business Operations",
+        "industry": "Business Support",
         "image": "images/characters/Navigator.png",
-        "video": "videos/Navigator.mp4"
+        "video": "videos/navigator.mp4",
+        "pageUrl": "characters/navigator.html"
     },
     {
         "id": 7,
         "name": "The Home Ranger",
         "industry": "Real Estate",
         "image": "images/characters/HomeRanger.png",
-        "video": "videos/HomeRanger.mp4"
+        "video": "videos/HomeRanger.mp4",
+        "pageUrl": "characters/home-ranger.html"
     },
     {
         "id": 8,
         "name": "Scholar",
         "industry": "Edu/Universities",
         "image": "images/characters/Scholar.png",
-        "video": "videos/Scholar.mp4"
+        "video": "videos/Scholar.mp4",
+        "pageUrl": "characters/scholar.html"
     },
     {
         "id": 9,
         "name": "HAVoC",
         "industry": "Trades/Service",
         "image": "images/characters/HAVoC.png",
-        "video": "videos/HAVoC.mp4"
+        "video": "videos/HAVoC.mp4",
+        "pageUrl": "characters/havoc.html"
     }
 ];
 
@@ -85,10 +94,10 @@ document.addEventListener('DOMContentLoaded', function() {
             grid.appendChild(charCard);
         });
     }
-
+    
     // Create the character grid
     createCharacterGrid();
-
+    
     const characters = document.querySelectorAll('.character-card');
     const modal = document.getElementById('videoModal');
     const video = document.getElementById('characterVideo');
@@ -99,74 +108,94 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSelected = 0;
     let isModalOpen = false;
     let isMusicPlaying = false;
-
+    let currentCharacterId = null;
+    
     // Initialize first character as selected
     characters[currentSelected].classList.add('selected');
-
-     // Character selection logic
-     function selectCharacter(index) {
+    
+    // Character selection logic
+    function selectCharacter(index) {
         characters.forEach(char => char.classList.remove('selected'));
         characters[index].classList.add('selected');
         currentSelected = index;
     }
-
+    
     // Show loading overlay
     function showLoading() {
         loadingOverlay.style.display = 'flex';
     }
-
+    
     // Hide loading overlay
     function hideLoading() {
         loadingOverlay.style.display = 'none';
     }
-    // (The remaining functions stay the same, just update the video path)
-
+    
+    // Function to redirect to character-specific page
+    function redirectToCharacterPage(characterId) {
+        const character = characterData.find(char => char.id == characterId);
+        if (character && character.pageUrl) {
+            window.location.href = character.pageUrl;
+        }
+    }
+    
+    // Play character video function
     function playCharacterVideo(characterId) {
         showLoading();
+        
+        // Store the current character ID
+        currentCharacterId = characterId;
         
         if (isMusicPlaying) {
             bgMusic.pause();
             isMusicPlaying = false;
         }
-
-        // Find the character data for the given ID
+        
+        // Find the character data for the selected ID
         const character = characterData.find(char => char.id == characterId);
-
+        
         setTimeout(() => {
-            //Uses the video path from the character data
+            // Use the video path from the character data
             const videoPath = character.video;
             video.src = videoPath;
-            modal.style.display = 'flex';
+            modal.style.display = 'flex'; // Changed from 'block' to 'flex'
             hideLoading();
             video.play();
             isModalOpen = true;
         }, 1000);
     }
-
-     // Event Listeners
-     characters.forEach((char, index) => {
+    
+    // Event Listeners
+    characters.forEach((char, index) => {
         char.addEventListener('click', () => {
             const characterId = char.dataset.id;
             playCharacterVideo(characterId);
         });
-
         char.addEventListener('mouseenter', () => {
             selectCharacter(index);
         });
     });
-
+    
     closeButton.addEventListener('click', () => {
         video.pause();
         video.src = '';
         modal.style.display = 'none';
         isModalOpen = false;
+        currentCharacterId = null; // Reset current character ID
         // Optionally, if you want the music to resume after closing the video:
         // if (!isMusicPlaying) {
         //     bgMusic.play();
         //     isMusicPlaying = true;
         // }
     });
-
+    
+    // Add event listener for video end
+    video.addEventListener('ended', function() {
+        // Redirect to the character's page when the video ends
+        if (currentCharacterId) {
+            redirectToCharacterPage(currentCharacterId);
+        }
+    });
+    
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
         if (isModalOpen) {
@@ -175,10 +204,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return;
         }
-
+        
         const gridColumns = 4;
         const totalCharacters = characters.length;
-
+        
         switch(e.key) {
             case 'ArrowRight':
                 e.preventDefault();
@@ -218,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
         }
     });
-
+    
     // Handle modal click outside
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
