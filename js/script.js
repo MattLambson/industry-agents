@@ -402,116 +402,144 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(() => console.log(`✓ Video exists: ${char.video}`))
             .catch(err => console.error(`✗ ${err.message}`));
     });
-// Handle on-screen controls - ONLY arrow buttons functional
-document.querySelectorAll('.arrow-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      const key = this.dataset.key;
+    
+    // Handle on-screen controls - ONLY arrow buttons functional
+    document.querySelectorAll('.arrow-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const key = this.dataset.key;
+          
+          // Create and dispatch a keyboard event for arrow buttons only
+          const event = new KeyboardEvent('keydown', {
+            key: key,
+            code: key,
+            bubbles: true
+          });
+          
+          document.dispatchEvent(event);
+          
+          // Add visual feedback
+          this.classList.add('active');
+          setTimeout(() => {
+            this.classList.remove('active');
+          }, 200);
+        });
+    });
       
-      // Create and dispatch a keyboard event for arrow buttons only
-      const event = new KeyboardEvent('keydown', {
-        key: key,
-        code: key,
-        bubbles: true
+    // For action buttons (A, B, Start) - just visual feedback, no actions
+    document.querySelectorAll('.action-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+          // Prevent any default action or event propagation
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Just visual feedback to show the button works
+          this.classList.add('active');
+          setTimeout(() => {
+            this.classList.remove('active');
+          }, 200);
+          
+          // No keyboard event is dispatched
+          return false;
+        });
+    });
+    
+    // Konami code tracker - with START at the end
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA', 'Enter']; // 'Enter' is for START
+    let konamiCodePosition = 0;
+    
+    // Function to check button presses against Konami code
+    function checkKonamiCode(buttonKey) {
+      // Check if the button pressed matches the next key in the sequence
+      if (buttonKey === konamiCode[konamiCodePosition]) {
+        konamiCodePosition++;
+        
+        // If we've reached the end of the sequence, activate the easter egg
+        if (konamiCodePosition === konamiCode.length) {
+          activateKonamiEasterEgg();
+          konamiCodePosition = 0; // Reset for next time
+        }
+      } else {
+        konamiCodePosition = 0; // Reset if wrong button pressed
+        
+        // If they press Up again after failing, count it as first step
+        if (buttonKey === konamiCode[0]) {
+          konamiCodePosition = 1;
+        }
+      }
+    }
+    
+    // Function to activate the enhanced Mario Star Power easter egg
+    function activateKonamiEasterEgg() {
+      console.log('MARIO STAR POWER ACTIVATED!');
+      
+      // Create glowing rainbow border overlay
+      const glowOverlay = document.createElement('div');
+      glowOverlay.className = 'konami-glow-overlay';
+      document.body.appendChild(glowOverlay);
+      
+      // Add "Cheat Activated" text
+      const cheatText = document.createElement('div');
+      cheatText.className = 'cheat-activated';
+      cheatText.innerText = 'CHEAT ACTIVATED!';
+      document.body.appendChild(cheatText);
+      
+      // Change background gradient for star power effect
+      document.body.classList.add('konami-active');
+      
+      // Add star power effect to all character cards
+      document.querySelectorAll('.character-card').forEach(card => {
+        card.classList.add('star-power');
       });
       
-      document.dispatchEvent(event);
+      // Optional: Play Mario star sound effect
+      try {
+        const starSound = new Audio('sounds/mario-star.mp3');
+        starSound.volume = 0.5;
+        starSound.play().catch(e => console.log('Audio playback error:', e));
+      } catch (err) {
+        console.log('Sound not available');
+      }
       
-      // Add visual feedback
-      this.classList.add('active');
+      // Remove effect after 10 seconds (extended from 5 seconds)
       setTimeout(() => {
-        this.classList.remove('active');
-      }, 200);
-    });
-  });
-  
-  // For action buttons (A, B, Start) - just visual feedback, no actions
-  document.querySelectorAll('.action-btn').forEach(button => {
-    button.addEventListener('click', function(e) {
-      // Prevent any default action or event propagation
-      e.preventDefault();
-      e.stopPropagation();
-      
-      // Just visual feedback to show the button works
-      this.classList.add('active');
-      setTimeout(() => {
-        this.classList.remove('active');
-      }, 200);
-      
-      // No keyboard event is dispatched
-      return false;
-    });
-  });
-// Konami code tracker - with START at the end
-const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA', 'Enter']; // 'Enter' is for START
-let konamiCodePosition = 0;
-
-// Function to check button presses against Konami code
-function checkKonamiCode(buttonKey) {
-  // Check if the button pressed matches the next key in the sequence
-  if (buttonKey === konamiCode[konamiCodePosition]) {
-    konamiCodePosition++;
-    
-    // If we've reached the end of the sequence, activate the easter egg
-    if (konamiCodePosition === konamiCode.length) {
-      activateKonamiEasterEgg();
-      konamiCodePosition = 0; // Reset for next time
+        document.body.removeChild(glowOverlay);
+        document.body.removeChild(cheatText);
+        document.body.classList.remove('konami-active');
+        
+        // Remove star power from character cards
+        document.querySelectorAll('.character-card').forEach(card => {
+          card.classList.remove('star-power');
+        });
+        
+      }, 10000); // 10 seconds of star power!
     }
-  } else {
-    konamiCodePosition = 0; // Reset if wrong button pressed
     
-    // If they press Up again after failing, count it as first step
-    if (buttonKey === konamiCode[0]) {
-      konamiCodePosition = 1;
-    }
-  }
-}
-
-// Function to activate the easter egg effect
-function activateKonamiEasterEgg() {
-  console.log('KONAMI CODE ACTIVATED!');
-  
-  // Create glowing border overlay
-  const glowOverlay = document.createElement('div');
-  glowOverlay.className = 'konami-glow-overlay';
-  document.body.appendChild(glowOverlay);
-  
-  // Change background gradient
-  document.body.classList.add('konami-active');
-  
-  // Remove effect after 5 seconds
-  setTimeout(() => {
-    document.body.removeChild(glowOverlay);
-    document.body.classList.remove('konami-active');
-  }, 5000);
-}
-
-// Handle on-screen controls - unified handler for ALL buttons
-document.querySelectorAll('.arrow-btn, .action-btn').forEach(button => {
-  button.addEventListener('click', function(e) {
-    // Prevent any default action
-    e.preventDefault();
-    
-    const key = this.dataset.key;
-    
-    // Check for Konami code
-    checkKonamiCode(key);
-    
-    // Only dispatch keyboard events for arrow buttons (for navigation)
-    if (this.classList.contains('arrow-btn')) {
-      const event = new KeyboardEvent('keydown', {
-        key: key,
-        code: key,
-        bubbles: true
+    // Handle on-screen controls - unified handler for ALL buttons
+    document.querySelectorAll('.arrow-btn, .action-btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        // Prevent any default action
+        e.preventDefault();
+        
+        const key = this.dataset.key;
+        
+        // Check for Konami code
+        checkKonamiCode(key);
+        
+        // Only dispatch keyboard events for arrow buttons (for navigation)
+        if (this.classList.contains('arrow-btn')) {
+          const event = new KeyboardEvent('keydown', {
+            key: key,
+            code: key,
+            bubbles: true
+          });
+          document.dispatchEvent(event);
+        }
+        
+        // Visual feedback for all buttons
+        this.classList.add('active');
+        setTimeout(() => {
+          this.classList.remove('active');
+        }, 200);
       });
-      document.dispatchEvent(event);
-    }
-    
-    // Visual feedback for all buttons
-    this.classList.add('active');
-    setTimeout(() => {
-      this.classList.remove('active');
-    }, 200);
-  });
-});
-
+    });
 });

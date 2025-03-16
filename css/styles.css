@@ -454,32 +454,72 @@ body.modal-open .sidebar {
     transform: scale(0.95);
   }
 
-  /* Konami code easter egg effects */
+/* Enhanced Mario Star Power Konami Code Effects */
 .konami-glow-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    box-shadow: inset 0 0 50px 20px rgba(255, 215, 0, 0.7); /* Golden glow inset */
-    z-index: 9999;
-    animation: konami-pulse 1s infinite alternate;
-  }
-  
-  body.konami-active {
-    background: linear-gradient(45deg, #FFD700, #FFA500, #FF8C00, #FF4500, #FF0000, #FF00FF);
-    background-size: 600% 600%;
-    animation: konamiGradientBG 5s ease infinite;
-  }
-  
-  @keyframes konami-pulse {
-    from { box-shadow: inset 0 0 50px 20px rgba(255, 215, 0, 0.7); }
-    to { box-shadow: inset 0 0 70px 30px rgba(255, 215, 0, 0.9); }
-  }
-  
-  @keyframes konamiGradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  animation: star-power-rainbow 0.5s linear infinite;
+}
+
+/* Cheat Activated Text */
+.cheat-activated {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 2.5rem;
+  color: white;
+  text-shadow: 2px 2px 0 #ff0000, -2px -2px 0 #ffff00, 2px -2px 0 #00ff00, -2px 2px 0 #0000ff;
+  z-index: 10000;
+  text-align: center;
+  animation: cheat-text-flash 0.3s infinite alternate;
+  pointer-events: none;
+}
+
+body.konami-active {
+  background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+  background-size: 400% 400%;
+  animation: star-power-bg 2s linear infinite;
+}
+
+.character-card.star-power {
+  animation: card-star-power 0.5s infinite alternate;
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+/* Star Power Animation Keyframes */
+@keyframes star-power-rainbow {
+  0% { box-shadow: inset 0 0 50px 20px rgba(255, 0, 0, 0.7); }
+  16.6% { box-shadow: inset 0 0 50px 20px rgba(255, 165, 0, 0.7); }
+  33.3% { box-shadow: inset 0 0 50px 20px rgba(255, 255, 0, 0.7); }
+  50% { box-shadow: inset 0 0 50px 20px rgba(0, 255, 0, 0.7); }
+  66.6% { box-shadow: inset 0 0 50px 20px rgba(0, 0, 255, 0.7); }
+  83.3% { box-shadow: inset 0 0 50px 20px rgba(238, 130, 238, 0.7); }
+  100% { box-shadow: inset 0 0 50px 20px rgba(255, 0, 0, 0.7); }
+}
+
+@keyframes star-power-bg {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@keyframes cheat-text-flash {
+  0% { opacity: 0.7; transform: translate(-50%, -50%) scale(0.95); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+@keyframes card-star-power {
+  0% { box-shadow: 0 0 15px 5px #ff0000; }
+  20% { box-shadow: 0 0 15px 5px #ffa500; }
+  40% { box-shadow: 0 0 15px 5px #ffff00; }
+  60% { box-shadow: 0 0 15px 5px #00ff00; }
+  80% { box-shadow: 0 0 15px 5px #0000ff; }
+  100% { box-shadow: 0 0 15px 5px #ff00ff; }
+}
