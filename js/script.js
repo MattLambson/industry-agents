@@ -545,6 +545,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to display random side text occasionally
     function displayRandomSideText() {
+        // Check if video modal is open - if so, just reschedule next appearance without showing text
+        if (isModalOpen) {
+            // Don't show text, just schedule next check
+            const nextDelay = 15000 + (Math.random() * 4000 - 2000); // 13-17 seconds
+            setTimeout(displayRandomSideText, nextDelay);
+            return;
+        }
+        
         const text = "Go ahead, give me a tap—I promise I won't call HR.";
         const sideText = document.createElement('div');
         sideText.className = 'random-side-text';
@@ -592,7 +600,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (document.body.contains(sideText)) {
                 document.body.removeChild(sideText);
             }
-        }, 6000); // Changed from 3000ms to 6000ms to match the animation duration
+        }, 6000);
         
         // Schedule next appearance with slight randomness (around 15 seconds)
         const nextDelay = 15000 + (Math.random() * 4000 - 2000); // 13-17 seconds
