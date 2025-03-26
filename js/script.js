@@ -542,4 +542,63 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 200);
       });
     });
+
+    // Function to display random side text occasionally
+    function displayRandomSideText() {
+        const text = "Go ahead, give me a tap—I promise I won't call HR.";
+        const sideText = document.createElement('div');
+        sideText.className = 'random-side-text';
+        sideText.textContent = text;
+        
+        // Get visible area boundaries to avoid overlapping content
+        const gameContainer = document.querySelector('.game-container');
+        const containerRect = gameContainer.getBoundingClientRect();
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        
+        // Randomly choose left or right side
+        const side = Math.random() > 0.5 ? 'left' : 'right';
+        
+        // Set vertical position between 20% and 80% of viewport height
+        const verticalPosition = Math.random() * (windowHeight * 0.6) + (windowHeight * 0.2);
+        
+        // Calculate horizontal position based on side
+        let horizontalPosition;
+        let rotation;
+        
+        if (side === 'left') {
+            // Position on left side, ensure it's not overlapping the game container
+            horizontalPosition = Math.random() * (containerRect.left * 0.7);
+            // Rotate toward center
+            rotation = Math.random() * 10 + 5; // 5-15 degrees
+            sideText.style.left = `${horizontalPosition}px`;
+            sideText.style.transform = `rotate(${rotation}deg)`;
+        } else {
+            // Position on right side
+            horizontalPosition = (containerRect.right) + Math.random() * (windowWidth - containerRect.right) * 0.7;
+            // Rotate toward center
+            rotation = Math.random() * -10 - 5; // -5 to -15 degrees
+            sideText.style.left = `${horizontalPosition}px`;
+            sideText.style.transform = `rotate(${rotation}deg)`;
+        }
+        
+        sideText.style.top = `${verticalPosition}px`;
+        
+        // Add to DOM
+        document.body.appendChild(sideText);
+        
+        // Remove after animation completes
+        setTimeout(() => {
+            if (document.body.contains(sideText)) {
+                document.body.removeChild(sideText);
+            }
+        }, 6000); // Changed from 3000ms to 6000ms to match the animation duration
+        
+        // Schedule next appearance with slight randomness (around 15 seconds)
+        const nextDelay = 15000 + (Math.random() * 4000 - 2000); // 13-17 seconds
+        setTimeout(displayRandomSideText, nextDelay);
+    }
+    
+    // Start the random text display after a delay
+    setTimeout(displayRandomSideText, 5000); // Start after 5 seconds
 });
