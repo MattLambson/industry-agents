@@ -1,4 +1,4 @@
-// Use the same character data from your main script
+// Character data (same as before)
 const characterData = [
     {
         "id": 1,
@@ -75,126 +75,210 @@ const characterData = [
 ];
 
 document.addEventListener('DOMContentLoaded', function() {
-    const videoGrid = document.querySelector('.video-grid');
-    const muteAllBtn = document.getElementById('muteAllBtn');
-    const unmuteAllBtn = document.getElementById('unmuteAllBtn');
+    const mainPlayer = document.getElementById('mainPlayer');
+    const toggleMuteBtn = document.getElementById('toggleMuteBtn');
+    const currentVideoName = document.getElementById('currentVideoName');
+    const currentVideoIndustry = document.getElementById('currentVideoIndustry');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const progressText = document.getElementById('progressText');
+    const progressDots = document.getElementById('progressDots');
     
-    // Function to check if video files exist before trying to play them
-    function checkVideoFile(url) {
-        return new Promise((resolve, reject) => {
-            const req = new XMLHttpRequest();
-            req.open('HEAD', url, true);
-            req.onload = function() {
-                if (req.status >= 200 && req.status < 300) {
-                    resolve(true);
-                } else {
-                    reject(new Error(`File at ${url} not found (status ${req.status})`));
-                }
-            };
-            req.onerror = function() {
-                reject(new Error(`Network error while checking ${url}`));
-            };
-            req.send();
+    let currentVideoIndex = 0;
+    let validVideos = []; // Will store indices of videos that successfully load
+    
+    // Debug - Log the working directory path
+    console.log("Current page URL:", window.location.href);
+    
+    // Important - Make videos play directly without checking if they exist first
+    // (Some servers don't support HEAD requests)
+    function startVideoPlayback() {
+        console.log("Starting video playback sequence");
+        
+        // Add all video indices to valid videos
+        for (let i = 0; i < characterData.length; i++) {
+            validVideos.push(i);
+        }
+        
+        // Create progress dots
+        createProgressDots();
+        
+        // Start with the first video
+        currentVideoIndex = 0;
+        loadAndPlayVideo(currentVideoIndex);
+    }
+    
+    // Create progress dots for all videos
+    function createProgressDots() {
+        progressDots.innerHTML = ''; // Clear existing dots if any
+        
+        characterData.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            if (index === 0) dot.classList.add('active');
+            progressDots.appendChild(dot);
         });
     }
     
-    // Create video cards for each character
-    function createVideoWall() {
-        characterData.forEach(char => {
-            // First check if the video exists
-            checkVideoFile(char.video)
-                .then(() => {
-                    const videoCard = document.createElement('div');
-                    videoCard.className = 'video-card';
-                    
-                    // Create video element
-                    const video = document.createElement('video');
-                    video.src = char.video;
-                    video.muted = true; // Start muted to allow autoplay
-                    video.loop = true;
-                    video.autoplay = true;
-                    video.controls = true; // Show video controls
-                    video.playsInline = true; // Better mobile support
-                    
-                    // Create title overlay
-                    const titleOverlay = document.createElement('div');
-                    titleOverlay.className = 'video-title';
-                    titleOverlay.textContent = `${char.name} - ${char.industry}`;
-                    
-                    // Create mute toggle button
-                    const muteToggle = document.createElement('button');
-                    muteToggle.className = 'mute-toggle';
-                    muteToggle.innerHTML = '🔇'; // Muted icon
-                    muteToggle.addEventListener('click', () => {
-                        video.muted = !video.muted;
-                        muteToggle.innerHTML = video.muted ? '🔇' : '🔊';
+    // Show error message in player
+    function showError(message) {
+        console.error("Video error:", message);
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.style.position = 'absolute';
+        errorDiv.style.top = '50%';
+        errorDiv.style.left = '50%';
+        errorDiv.style.transform = 'translate(-50%, -50%)';
+        errorDiv.style.background = 'rgba(0,0,0,0.7)';
+        errorDiv.style.color = 'white';
+        errorDiv.style.padding = '20px';
+        errorDiv.style.borderRadius = '10px';
+        errorDiv.style.textAlign = 'center';
+        errorDiv.innerHTML = `
+            <h3>Video Error</h3>
+            <p>${message}</p>
+            <p>Video path: ${characterData[currentVideoIndex]?.video || 'Unknown'}</p>
+        `;
+        
+        // Add to player container
+        mainPlayer.parentNode.appendChild(errorDiv);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.parentNode.removeChild(errorDiv);
+            }
+        }, 5000);
+        
+        // Try to continue with next video after an error
+        setTimeout(playNextVideo, 3000);
+    }
+    
+    // Load and play a specific video
+    function loadAndPlayVideo(index) {
+        if (index >= characterData.length || index < 0) {
+            console.error("Invalid video index:", index);
+            playNextVideo();
+            return;
+        }
+        
+        const videoData = characterData[index];
+        console.log(`Loading video: ${videoData.name}, Path: ${videoData.video}`);
+        
+        showLoading(true);
+        
+        // Update the progress indicator
+        updateProgressIndicator(index);
+        
+        // Update video info
+        currentVideoName.textContent = videoData.name;
+        currentVideoIndustry.textContent = videoData.industry;
+        
+        // Update video source
+        mainPlayer.innerHTML = ''; // Clear any previous source elements
+        const source = document.createElement('source');
+        source.src = videoData.video;
+        source.type = 'video/mp4';
+        mainPlayer.appendChild(source);
+        
+        // Reload and play
+        mainPlayer.load();
+        
+        // Give the browser a moment to process the new source
+        setTimeout(() => {
+            const playPromise = mainPlayer.play();
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        console.log(`Successfully playing: ${videoData.name}`);
+                        showLoading(false);
+                    })
+                    .catch(error => {
+                        console.error(`Error playing video ${videoData.name}:`, error);
+                        showLoading(false);
+                        
+                        // Show visible error but continue playback
+                        showError(`Could not play ${videoData.name}: ${error.message}`);
                     });
-                    
-                    // Add everything to the card
-                    videoCard.appendChild(video);
-                    videoCard.appendChild(titleOverlay);
-                    videoCard.appendChild(muteToggle);
-                    
-                    // Add card to grid
-                    videoGrid.appendChild(videoCard);
-                    
-                    // Try to play the video
-                    const playPromise = video.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.error(`Error playing video for ${char.name}:`, error);
-                            
-                            // For some browsers, we need to try again with user interaction
-                            video.addEventListener('click', () => {
-                                video.play().catch(e => console.error('Still could not play video:', e));
-                            });
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error(`Could not load video for ${char.name}:`, error);
-                    
-                    // Create error card instead
-                    const errorCard = document.createElement('div');
-                    errorCard.className = 'video-card error-card';
-                    errorCard.innerHTML = `
-                        <div class="error-message">
-                            <h3>Video not available</h3>
-                            <p>${char.name} - ${char.industry}</p>
-                            <p class="error-details">Could not load video file: ${char.video}</p>
-                        </div>
-                    `;
-                    videoGrid.appendChild(errorCard);
-                });
-        });
+            }
+        }, 500);
     }
     
-    // Initialize the video wall
-    createVideoWall();
-    
-    // Handle mute/unmute all buttons
-    muteAllBtn.addEventListener('click', () => {
-        document.querySelectorAll('.video-grid video').forEach(video => {
-            video.muted = true;
-            const muteToggle = video.parentNode.querySelector('.mute-toggle');
-            if (muteToggle) muteToggle.innerHTML = '🔇';
+    // Update the progress dots and text
+    function updateProgressIndicator(index) {
+        // Update dots
+        const dots = progressDots.querySelectorAll('.dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
         });
-    });
-    
-    unmuteAllBtn.addEventListener('click', () => {
-        document.querySelectorAll('.video-grid video').forEach(video => {
-            video.muted = false;
-            const muteToggle = video.parentNode.querySelector('.mute-toggle');
-            if (muteToggle) muteToggle.innerHTML = '🔊';
-        });
-    });
-    
-    // Add a link in the main page to this video wall
-    if (window.opener && window.opener !== window) {
-        const mainPageLink = document.createElement('a');
-        mainPageLink.href = 'video-wall.html';
-        mainPageLink.className = 'video-wall-link';
-        mainPageLink.textContent = 'View All Videos';
-        document.body.appendChild(mainPageLink);
+        
+        // Update text
+        progressText.textContent = `Video ${index + 1}/${characterData.length}`;
     }
+    
+    // Show/hide loading indicator
+    function showLoading(show) {
+        loadingIndicator.style.display = show ? 'block' : 'none';
+    }
+    
+    // Play the next video in sequence
+    function playNextVideo() {
+        currentVideoIndex++;
+        
+        // Loop back to the beginning if we've reached the end
+        if (currentVideoIndex >= characterData.length) {
+            currentVideoIndex = 0;
+        }
+        
+        // Load and play the next video
+        loadAndPlayVideo(currentVideoIndex);
+    }
+    
+    // Event: When current video ends, play the next one
+    mainPlayer.addEventListener('ended', function() {
+        console.log("Video ended, playing next...");
+        playNextVideo();
+    });
+    
+    // Handle video errors
+    mainPlayer.addEventListener('error', function(e) {
+        console.error("Video error event:", e);
+        
+        const error = e.target.error;
+        let errorMessage = "Unknown error";
+        
+        if (error) {
+            switch (error.code) {
+                case error.MEDIA_ERR_ABORTED:
+                    errorMessage = "You aborted the video playback";
+                    break;
+                case error.MEDIA_ERR_NETWORK:
+                    errorMessage = "A network error caused the video download to fail";
+                    break;
+                case error.MEDIA_ERR_DECODE:
+                    errorMessage = "The video playback was aborted due to a corruption problem";
+                    break;
+                case error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                    errorMessage = "The video format is not supported";
+                    break;
+                default:
+                    errorMessage = "An unknown error occurred";
+                    break;
+            }
+        }
+        
+        showError(errorMessage);
+        
+        // Try the next video after a short delay
+        setTimeout(playNextVideo, 3000);
+    });
+    
+    // Toggle mute button
+    toggleMuteBtn.addEventListener('click', function() {
+        mainPlayer.muted = !mainPlayer.muted;
+        toggleMuteBtn.textContent = mainPlayer.muted ? 'Unmute' : 'Mute';
+    });
+    
+    // Start video playback
+    startVideoPlayback();
 });

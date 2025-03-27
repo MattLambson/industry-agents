@@ -12,13 +12,37 @@
     <div class="background-overlay"></div>
     <div class="video-wall-container">
         <h1>Industry Agents Video Wall</h1>
+        
+        <!-- Single large video player that plays videos in sequence -->
+        <div class="video-player">
+            <video id="mainPlayer" autoplay muted>
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+            <!-- Overlay for current video info -->
+            <div class="video-info-overlay">
+                <h2 id="currentVideoName"></h2>
+                <p id="currentVideoIndustry"></p>
+            </div>
+        </div>
+        
         <div class="controls-bar">
-            <button id="muteAllBtn">Mute All</button>
-            <button id="unmuteAllBtn">Unmute All</button>
             <a href="index.html" class="back-btn">Back to Character Selection</a>
         </div>
-        <div class="video-grid">
-            <!-- Videos will be dynamically inserted here -->
+        
+        <!-- Loading indicator -->
+        <div id="loadingIndicator" class="loading-indicator">
+            <div class="loading-spinner"></div>
+            <p>Loading next video...</p>
+        </div>
+        
+        <!-- Small progress indicator -->
+        <div class="progress-indicator">
+            <div id="progressText">Video 1/9</div>
+            <div class="progress-dots" id="progressDots">
+                <!-- Dots will be inserted here -->
+            </div>
         </div>
     </div>
     <script src="js/video-wall.js"></script>
