@@ -76,7 +76,6 @@ const characterData = [
 
 document.addEventListener('DOMContentLoaded', function() {
     const mainPlayer = document.getElementById('mainPlayer');
-    const toggleMuteBtn = document.getElementById('toggleMuteBtn');
     const currentVideoName = document.getElementById('currentVideoName');
     const currentVideoIndustry = document.getElementById('currentVideoIndustry');
     const loadingIndicator = document.getElementById('loadingIndicator');
@@ -125,15 +124,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
-        errorDiv.style.position = 'absolute';
-        errorDiv.style.top = '50%';
-        errorDiv.style.left = '50%';
-        errorDiv.style.transform = 'translate(-50%, -50%)';
-        errorDiv.style.background = 'rgba(0,0,0,0.7)';
-        errorDiv.style.color = 'white';
-        errorDiv.style.padding = '20px';
-        errorDiv.style.borderRadius = '10px';
-        errorDiv.style.textAlign = 'center';
         errorDiv.innerHTML = `
             <h3>Video Error</h3>
             <p>${message}</p>
@@ -273,12 +263,12 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(playNextVideo, 3000);
     });
     
-    // Toggle mute button
-    toggleMuteBtn.addEventListener('click', function() {
-        mainPlayer.muted = !mainPlayer.muted;
-        toggleMuteBtn.textContent = mainPlayer.muted ? 'Unmute' : 'Mute';
-    });
-    
     // Start video playback
     startVideoPlayback();
+    
+    // Help diagnose path issues
+    console.log("Debug info:");
+    console.log("Page URL:", window.location.href);
+    console.log("Folder path:", window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')));
+    console.log("Sample video path:", characterData[0].video);
 });
