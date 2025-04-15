@@ -1,0 +1,392 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background: linear-gradient(45deg, #A31E8B, #E01E88, #27288E, #2726D5, #4D2190, #36125A);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+    padding: 20px;
+}
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(54, 18, 90, 0.3);
+    z-index: -1;
+}
+/* Container styles */
+.game-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    position: relative;
+    margin: 0 auto;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+    color: white;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(255, 255, 255, 0.1);
+    animation: titlePulse 2s infinite;
+}
+/* Video Wall Link */
+.video-wall-link-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.video-wall-btn {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    color: white;
+    padding: 8px 15px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8em;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.video-wall-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}
+/* Character grid */
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 900px;
+}
+.character-card {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    aspect-ratio: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 150px;
+}
+.character-card:hover,
+.character-card.selected {
+    transform: scale(1.05);
+    box-shadow: 
+        0 0 20px rgba(255, 255, 255, 0.5),
+        0 0 40px rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
+}
+.character-frame {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    min-height: 150px;
+}
+.character-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+.character-info {
+    padding: 10px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.character-name {
+    font-size: 0.9em;
+    color: white;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.2;
+    min-height: 2.4em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.character-industry {
+    font-size: 0.7em;
+    color: rgba(255, 255, 255, 0.8);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.2;
+    min-height: 2.4em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.close-button {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+/* This will add a slight darkening effect to the background content */
+body.modal-open .game-container,
+body.modal-open .sidebar {
+    filter: brightness(0.3);
+    transition: filter 0.3s ease;
+}
+.close-button:hover {
+    transform: scale(1.2);
+    color: rgba(255, 255, 255, 0.8);
+}
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+#characterVideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+/* Loading overlay */
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top: 5px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+.loading-text {
+    margin-top: 20px;
+    color: white;
+}
+/* Controls hint */
+.controls-hint {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 0.6em;
+    color: rgba(255, 255, 255, 0.7);
+}
+.controls-hint p {
+    margin: 5px 0;
+}
+/* Animations */
+@keyframes titlePulse {
+    0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3); }
+    50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5); }
+    100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3); }
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+/* Responsive design */
+@media (min-width: 1200px) {
+    .character-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 1199px) and (min-width: 900px) {
+    .character-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 899px) and (min-width: 600px) {
+    .character-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 599px) {
+    .character-grid {
+        grid-template-columns: repeat(1, 1fr);
+        max-width: 300px;
+    }
+    
+    .game-container {
+        padding: 10px;
+    }
+    h1 {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+    
+    .controls-hint {
+        display: none;
+    }
+    .close-button {
+        right: 0;
+        top: -30px;
+    }
+    .character-name,
+    .character-industry {
+        font-size: 0.8em;
+    }
+}
+/* Image Modal Styles - Updated for Theater Effect */
+#imageModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Darker background for theater effect */
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+#imageModal[style*="flex"] {
+    opacity: 1;
+}
+/* Style for the close button - this fixes the unwanted X */
+#imageCloseButton {
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    cursor: pointer;
+    font-size: 18px;
+}
+/* Only show the close button when modal is active */
+#imageModal[style*="flex"] #imageCloseButton {
+    opacity: 1;
+}
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    margin: auto;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Add shadow for depth */
+    transition: transform 0.3s ease;
+    transform: scale(0.95);
+}
+#imageModal[style*="flex"] .modal-content {
+    transform: scale(1);
+}
+#fullSizeImage {
+    display: block;
+    max-width: 100%;
+    max-height: 85vh;
+    margin: 0 auto;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+.photo-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Remove fixed height constraint */
+    min-height: 250px; /* Minimum height but allow expansion */
+}
+.photo-box img {
+    width: auto; /* Don't force width to 100% */
+    height: auto; /* Don't force height to 100% */
+    max-width: 100%; /* Ensure it fits within container width */
+    max-height: 100%; /* Ensure it fits within container height */
+    object-fit: contain; /* Maintain aspect ratio */
+}
+/* Enhanced theater mode effects */
+body.modal-open .main-content,
+body.modal-open .sidebar {
+    filter: brightness(0.3);
+    transition: filter 0.3s ease;
+}

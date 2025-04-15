@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Agents - Selezione Personaggio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    <div class="game-container">
+        <h1>Seleziona il Tuo Industry Agent</h1>
+        
+        <div class="video-wall-link-container">
+            <a href="video-wall.html" class="video-wall-btn">Visualizza Tutti i Video</a>
+        </div>
+        
+        <div class="character-grid">
+            <!-- Characters will be dynamically inserted here -->
+        </div>
+        <div id="videoModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <div class="video-container">
+                    <video id="characterVideo" controls>
+                        <source src="" type="video/mp4">
+                        Il tuo browser non supporta il tag video.
+                    </video>
+                </div>
+            </div>
+        </div>
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Caricamento...</div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
